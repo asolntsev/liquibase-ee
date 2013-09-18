@@ -1,0 +1,162 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="LiquiBase Enterprise Edition" default="all">
+
+  <property name="classes" value="${basedir}/out/production/liquibase-ee"/>
+  <property name="classes-test" value="${basedir}/out/test/liquibase-ee"/>
+  <property name="report.dir" value="${basedir}/out/reports"/>
+
+  <target name="clean">
+    <delete dir="${basedir}/out"/>
+    <delete dir="test-results"/>
+  </target>
+
+  <path id="compile.lib.path">
+    <fileset dir="lib" includes="*.jar"/>
+  </path>
+
+  <target name="compile">
+    <mkdir dir="${classes}"/>
+    <javac srcdir="src" destdir="${classes}" classpathref="compile.lib.path" encoding="UTF-8" deprecation="yes" source="1.7" target="1.7" classpath="lib" debug="true" debuglevel="lines,vars,source"/>
+
+    <copy todir="${classes}">
+      <fileset dir="src">
+        <exclude name="**/*.java"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="compile-test" depends="compile">
+    <mkdir dir="${classes-test}"/>
+    <javac srcdir="test" destdir="${classes-test}" encoding="UTF-8" deprecation="yes" source="1.7" target="1.7" classpath="lib" debug="true" debuglevel="lines,vars,source"
+           classpathref="test.lib.path" excludes="ee.uitest/**"/>
+    <copy todir="${classes-test}" includeemptydirs="false">
+      <fileset dir="test">
+        <exclude name="**/*.java"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="test" depends="compile-test">
+    <mkdir dir="test-results"/>
+    <junit maxmemory="512m" haltonfailure="false" failureproperty="tests-failed" fork="true" forkmode="once" showoutput="true">
+      <batchtest todir="test-results">
+        <fileset dir="${classes-test}" includes="ee/liquibase/**/*Test.*" excludes="**/Abstract*"/>
+        <formatter type="xml"/>
+      </batchtest>
+      <classpath>
+        <pathelement path="${classes-test}"/>
+        <path refid="compile.lib.path"/>
+      </classpath>
+    </junit>
+    <junitreport todir="test-results">
+      <fileset dir="test-results">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="test-results/html"/>
+    </junitreport>
+    <fail if="tests-failed"/>
+  </target>
+
+  <target name="setup-database">
+    <property name="environment" value="local"/>
+    <property file="conf/${environment}.properties"/>
+
+    <path id="database.lib.path">
+      <fileset dir="lib" includes="*.jar"/>
+      <pathelement path="${classes}"/>
+    </path>
+
+    <taskdef resource="liquibasetasks.properties">
+      <classpath refid="database.lib.path"/>
+    </taskdef>
+
+    <echo message="Database URL: ${database.url}"/>
+  </target>
+
+  <target name="migrate-database" depends="setup-database">
+    <property name="dropFirst" value="false"/>
+    <echo message="Database username: ${database.username}"/>
+    <updateDatabase
+        driver="${database.driver}" dropFirst="${dropFirst}" classpathref="database.lib.path"
+        changeLogFile="database/changelog.xml"
+        url="${database.url}"
+        username="${database.username}"
+        password="${database.password}"
+        contexts="${database.contexts}"
+        >
+      <changelogproperty name="database.dblink.accounts" value="${database.dblink.accounts}"/>
+      <changelogproperty name="database.dblink.payments" value="${database.dblink.payments}"/>
+    </updateDatabase>
+  </target>
+
+  <target name="show-sql" depends="setup-database">
+    <echo message="Database username: ${database.username}"/>
+    <java classname="liquibase.integration.commandline.Main" classpathref="database.lib.path" output="changes.sql" error="changes.log" fork="true">
+      <jvmarg value="-Ddatabase.dblink.accounts=${database.dblink.accounts}"/>
+      <jvmarg value="-Ddatabase.dblink.payments=${database.dblink.payments}"/>
+      <arg value="--driver=${database.driver}"/>
+      <arg value="--changeLogFile=database/changelog.xml"/>
+      <arg value="--url=${database.url}"/>
+      <arg value="--username=${database.username}"/>
+      <arg value="--password=${database.password}"/>
+      <arg value="--contexts=prod"/>
+      <arg value="updateSQL"/>
+    </java>
+  </target>
+
+  <target name="create-database">
+    <property name="dropFirst" value="true"/>
+    <antcall target="migrate-database"/>
+  </target>
+
+  <target name="test-database" depends="setup-database">
+    <echo message="Database username: ${database.username}"/>
+    <updateDatabase
+        driver="${database.driver}" classpathref="database.lib.path"
+        changeLogFile="database/tests.xml"
+        url="${database.url}"
+        username="${database.username}"
+        password="${database.password}"
+        contexts="${database.contexts}"
+        >
+    </updateDatabase>
+  </target>
+
+  <target name="rollback-database" depends="setup-database">
+    <echo message="Database username: ${database.username}"/>
+    <property name="count" value="1"/>
+    <rollbackDatabase
+        driver="${database.driver}" classpathref="database.lib.path" rollbackCount="${count}"
+        changeLogFile="database/changelog.xml"
+        url="${database.url}"
+        username="${database.username}"
+        password="${database.password}"
+        contexts="${database.contexts}"
+        >
+      <changelogproperty name="database.dblink.accounts" value="${database.dblink.accounts}"/>
+      <changelogproperty name="database.dblink.payments" value="${database.dblink.payments}"/>
+    </rollbackDatabase>
+  </target>
+
+  <target name="run" depends="compile">
+    <property name="environment" value="inmemory"/>
+
+    <java classname="ee.liquibase.web.Launcher" fork="true">
+      <classpath>
+        <pathelement path="${classes}"/>
+        <path refid="compile.lib.path"/>
+      </classpath>
+      <jvmarg value="-Denvironment=${environment}"/>
+    </java>
+  </target>
+
+  <target name="prepare-h2-database" depends="compile">
+    <delete file="out/liquibase-ee.h2.db"/>
+    <property name="environment" value="inmemory"/>
+    <antcall target="migrate-database"/>
+  </target>
+
+  <target name="start" depends="prepare-h2-database, run"/>
+
+  <target name="all" depends="clean, test, prepare-h2-database"/>
+  <target name="deploy" depends="clean, compile, migrate-database"/>
+</project>
