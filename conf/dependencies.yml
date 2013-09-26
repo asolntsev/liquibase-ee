@@ -1,0 +1,6 @@
+require:
+    - play 1.2+
+    - play -> liquibase 2.+
+    - org.hamcrest -> hamcrest-all 1.+
+    - org.mockito -> mockito-all 1.9.+
+    #- org.postgresql -> postgresql 9.2-1003-jdbc4

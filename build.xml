@@ -77,7 +77,7 @@
     <echo message="Database username: ${database.username}"/>
     <updateDatabase
         driver="${database.driver}" dropFirst="${dropFirst}" classpathref="database.lib.path"
-        changeLogFile="database/changelog.xml"
+        changeLogFile="app/database/changelog.xml"
         url="${database.url}"
         username="${database.username}"
         password="${database.password}"
@@ -94,7 +94,7 @@
       <jvmarg value="-Ddatabase.dblink.accounts=${database.dblink.accounts}"/>
       <jvmarg value="-Ddatabase.dblink.payments=${database.dblink.payments}"/>
       <arg value="--driver=${database.driver}"/>
-      <arg value="--changeLogFile=database/changelog.xml"/>
+      <arg value="--changeLogFile=app/database/changelog.xml"/>
       <arg value="--url=${database.url}"/>
       <arg value="--username=${database.username}"/>
       <arg value="--password=${database.password}"/>
@@ -112,7 +112,7 @@
     <echo message="Database username: ${database.username}"/>
     <updateDatabase
         driver="${database.driver}" classpathref="database.lib.path"
-        changeLogFile="database/tests.xml"
+        changeLogFile="app/database/tests.xml"
         url="${database.url}"
         username="${database.username}"
         password="${database.password}"
@@ -126,7 +126,7 @@
     <property name="count" value="1"/>
     <rollbackDatabase
         driver="${database.driver}" classpathref="database.lib.path" rollbackCount="${count}"
-        changeLogFile="database/changelog.xml"
+        changeLogFile="app/database/changelog.xml"
         url="${database.url}"
         username="${database.username}"
         password="${database.password}"
