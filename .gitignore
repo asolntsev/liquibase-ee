@@ -2,7 +2,8 @@
 
 # Package Files #
 *.iml
-/test-results
+/.idea
+/test-result
 /lib
 /tmp
 /out

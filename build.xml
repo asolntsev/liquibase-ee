@@ -6,39 +6,39 @@
 
   <target name="clean">
     <delete dir="${basedir}/out"/>
-    <delete dir="test-results"/>
+    <delete dir="test-result"/>
   </target>
 
   <path id="compile.lib.path">
-    <fileset dir="lib" includes="*.jar"/>
+    <fileset dir="jars" includes="*.jar"/>
   </path>
 
   <target name="compile">
     <mkdir dir="${classes}"/>
-    <javac srcdir="src" destdir="${classes}" classpathref="compile.lib.path" encoding="UTF-8" deprecation="yes" source="1.7" target="1.7" classpath="lib" debug="true" debuglevel="lines,vars,source"/>
+    <!--<javac srcdir="src" destdir="${classes}" classpathref="compile.lib.path" encoding="UTF-8" deprecation="yes" source="1.7" target="1.7" classpath="lib" debug="true" debuglevel="lines,vars,source"/>
 
     <copy todir="${classes}">
       <fileset dir="src">
         <exclude name="**/*.java"/>
       </fileset>
-    </copy>
+    </copy>-->
   </target>
 
   <target name="compile-test" depends="compile">
     <mkdir dir="${classes-test}"/>
-    <javac srcdir="test" destdir="${classes-test}" encoding="UTF-8" deprecation="yes" source="1.7" target="1.7" classpath="lib" debug="true" debuglevel="lines,vars,source"
+    <!--<javac srcdir="test" destdir="${classes-test}" encoding="UTF-8" deprecation="yes" source="1.7" target="1.7" classpath="lib" debug="true" debuglevel="lines,vars,source"
            classpathref="test.lib.path" excludes="ee.uitest/**"/>
     <copy todir="${classes-test}" includeemptydirs="false">
       <fileset dir="test">
         <exclude name="**/*.java"/>
       </fileset>
-    </copy>
+    </copy>-->
   </target>
 
   <target name="test" depends="compile-test">
-    <mkdir dir="test-results"/>
+    <!--<mkdir dir="test-result"/>
     <junit maxmemory="512m" haltonfailure="false" failureproperty="tests-failed" fork="true" forkmode="once" showoutput="true">
-      <batchtest todir="test-results">
+      <batchtest todir="test-result">
         <fileset dir="${classes-test}" includes="ee/liquibase/**/*Test.*" excludes="**/Abstract*"/>
         <formatter type="xml"/>
       </batchtest>
@@ -47,21 +47,22 @@
         <path refid="compile.lib.path"/>
       </classpath>
     </junit>
-    <junitreport todir="test-results">
-      <fileset dir="test-results">
+    <junitreport todir="test-result">
+      <fileset dir="test-result">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="test-results/html"/>
+      <report format="frames" todir="test-result/html"/>
     </junitreport>
-    <fail if="tests-failed"/>
+    <fail if="tests-failed"/>-->
   </target>
 
   <target name="setup-database">
-    <property name="environment" value="local"/>
-    <property file="conf/${environment}.properties"/>
+    <!--<property name="environment" value="local"/>-->
+    <!--<property file="conf/${environment}.properties"/>-->
+    <property file="conf/application.conf"/>
 
     <path id="database.lib.path">
-      <fileset dir="lib" includes="*.jar"/>
+      <fileset dir="jars" includes="*.jar"/>
       <pathelement path="${classes}"/>
     </path>
 
@@ -69,35 +70,35 @@
       <classpath refid="database.lib.path"/>
     </taskdef>
 
-    <echo message="Database URL: ${database.url}"/>
+    <echo message="Database URL: ${db.url}"/>
   </target>
 
   <target name="migrate-database" depends="setup-database">
     <property name="dropFirst" value="false"/>
-    <echo message="Database username: ${database.username}"/>
+    <echo message="Database username: ${db.user},. contexts: ${liquibase.contexts}"/>
     <updateDatabase
-        driver="${database.driver}" dropFirst="${dropFirst}" classpathref="database.lib.path"
+        driver="${db.driver}" dropFirst="${dropFirst}" classpathref="database.lib.path"
         changeLogFile="app/database/changelog.xml"
-        url="${database.url}"
-        username="${database.username}"
-        password="${database.password}"
-        contexts="${database.contexts}"
+        url="${db.url}"
+        username="${db.user}"
+        password="${db.pass}"
+        contexts="${liquibase.contexts}"
         >
-      <changelogproperty name="database.dblink.accounts" value="${database.dblink.accounts}"/>
-      <changelogproperty name="database.dblink.payments" value="${database.dblink.payments}"/>
+      <changelogproperty name="db.dblink.accounts" value="${db.dblink.accounts}"/>
+      <changelogproperty name="db.dblink.payments" value="${db.dblink.payments}"/>
     </updateDatabase>
   </target>
 
   <target name="show-sql" depends="setup-database">
-    <echo message="Database username: ${database.username}"/>
+    <echo message="Database username: ${db.user}"/>
     <java classname="liquibase.integration.commandline.Main" classpathref="database.lib.path" output="changes.sql" error="changes.log" fork="true">
-      <jvmarg value="-Ddatabase.dblink.accounts=${database.dblink.accounts}"/>
-      <jvmarg value="-Ddatabase.dblink.payments=${database.dblink.payments}"/>
-      <arg value="--driver=${database.driver}"/>
+      <jvmarg value="-Ddatabase.dblink.accounts=${db.dblink.accounts}"/>
+      <jvmarg value="-Ddatabase.dblink.payments=${db.dblink.payments}"/>
+      <arg value="--driver=${db.driver}"/>
       <arg value="--changeLogFile=app/database/changelog.xml"/>
-      <arg value="--url=${database.url}"/>
-      <arg value="--username=${database.username}"/>
-      <arg value="--password=${database.password}"/>
+      <arg value="--url=${db.url}"/>
+      <arg value="--username=${db.user}"/>
+      <arg value="--password=${db.pass}"/>
       <arg value="--contexts=prod"/>
       <arg value="updateSQL"/>
     </java>
@@ -109,31 +110,31 @@
   </target>
 
   <target name="test-database" depends="setup-database">
-    <echo message="Database username: ${database.username}"/>
+    <echo message="Database username: ${db.user}"/>
     <updateDatabase
-        driver="${database.driver}" classpathref="database.lib.path"
+        driver="${db.driver}" classpathref="database.lib.path"
         changeLogFile="app/database/tests.xml"
-        url="${database.url}"
-        username="${database.username}"
-        password="${database.password}"
-        contexts="${database.contexts}"
+        url="${db.url}"
+        username="${db.user}"
+        password="${db.pass}"
+        contexts="${liquibase.contexts}"
         >
     </updateDatabase>
   </target>
 
   <target name="rollback-database" depends="setup-database">
-    <echo message="Database username: ${database.username}"/>
+    <echo message="Database username: ${db.user}"/>
     <property name="count" value="1"/>
     <rollbackDatabase
-        driver="${database.driver}" classpathref="database.lib.path" rollbackCount="${count}"
+        driver="${db.driver}" classpathref="database.lib.path" rollbackCount="${count}"
         changeLogFile="app/database/changelog.xml"
-        url="${database.url}"
-        username="${database.username}"
-        password="${database.password}"
-        contexts="${database.contexts}"
+        url="${db.url}"
+        username="${db.user}"
+        password="${db.pass}"
+        contexts="${liquibase.contexts}"
         >
-      <changelogproperty name="database.dblink.accounts" value="${database.dblink.accounts}"/>
-      <changelogproperty name="database.dblink.payments" value="${database.dblink.payments}"/>
+      <changelogproperty name="db.dblink.accounts" value="${db.accounts}"/>
+      <changelogproperty name="db.dblink.payments" value="${db.dblink.payments}"/>
     </rollbackDatabase>
   </target>
 
@@ -149,14 +150,6 @@
     </java>
   </target>
 
-  <target name="prepare-h2-database" depends="compile">
-    <delete file="out/liquibase-ee.h2.db"/>
-    <property name="environment" value="inmemory"/>
-    <antcall target="migrate-database"/>
-  </target>
-
-  <target name="start" depends="prepare-h2-database, run"/>
-
-  <target name="all" depends="clean, test, prepare-h2-database"/>
+  <target name="all" depends="clean, test"/>
   <target name="deploy" depends="clean, compile, migrate-database"/>
 </project>
