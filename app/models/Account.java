@@ -13,7 +13,7 @@ public class Account extends Model {
   @Column(name = "account_id") String accountId;
   @Column(name = "balance") BigDecimal balance;
 
-	public Account() {
+	public Account(String accountId, BigDecimal balance) {
 		this.accountId = accountId;
 		this.balance = balance;
 	}

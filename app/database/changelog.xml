@@ -7,6 +7,8 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
   <include file="database/changelog_001.xml"/>
+  <include file="database/test_data.xml"/>
+
   <!--<include file="changelog_procedures_001.xml"/>
   <include file="database/static_data_001.xml"/>
 
@@ -19,7 +21,6 @@
     <sqlFile path="recompile_packages.sql" splitStatements="false"/>
   </changeSet>
 
-  <include file="database/test_data.xml"/>
   <include file="database/tests.xml"/>-->
 
 </databaseChangeLog>

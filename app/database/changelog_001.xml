@@ -8,16 +8,12 @@
 
 
   <changeSet id="201205281433" author="Codeborne">
-    <sql>
-      CREATE TABLE account (
-        id NUMBER NOT NULL,
-        account_id VARCHAR2(32 CHAR) NOT NULL,
-        balance NUMBER NOT NULL,
-        CONSTRAINT account_pk PRIMARY KEY (id)
-      )
-    </sql>
-    <rollback>
-      DROP TABLE account
-    </rollback>
+    <createTable tableName="account">
+      <column name="id" type="NUMBER" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="account_pk"/>
+      </column>
+      <column name="account_id" type="VARCHAR2(32 CHAR)"/>
+      <column name="balance" type="NUMBER"/>
+    </createTable>
   </changeSet>
 </databaseChangeLog>

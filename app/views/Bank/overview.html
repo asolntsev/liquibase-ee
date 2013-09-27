@@ -1,4 +1,33 @@
 #{extends 'main.html' /}
-#{set title:'Home' /}
+#{set title:'Bank overview' /}
 
-#{welcome /}
+<div class="container">
+
+  <div class="starter-template">
+    <h1>Bank overview</h1>
+    <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+  </div>
+
+  <div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Panel heading</div>
+
+    <!-- Table -->
+    <table class="table">
+      <thead>
+        <tr>
+          <td>Account Nr</td>
+          <td>Balance</td>
+        </tr>
+      </thead>
+      <tbody>
+        #{list items:accounts, as:'account'}
+          <tr>
+            <td>${account.accountId}</td>
+            <td>${account.balance}</td>
+          </tr>
+        #{/list}
+      </tbody>
+    </table>
+  </div>
+</div>

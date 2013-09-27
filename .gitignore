@@ -1,7 +1,9 @@
 *.class
 
 # Package Files #
-*.jar
-*.war
-*.ear
-test-results
+*.iml
+/test-results
+/lib
+/tmp
+/out
+/modules

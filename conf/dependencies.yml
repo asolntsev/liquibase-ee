@@ -3,4 +3,14 @@ require:
     - play -> liquibase 2.+
     - org.hamcrest -> hamcrest-all 1.+
     - org.mockito -> mockito-all 1.9.+
+
     #- org.postgresql -> postgresql 9.2-1003-jdbc4
+
+    - ojdbc14_g -> ojdbc14_g
+
+repositories:
+    - local-jars:
+        type:       local
+        artifact:   ${application.path}/jars/[module].jar
+        contains:
+            - ojdbc14_g
