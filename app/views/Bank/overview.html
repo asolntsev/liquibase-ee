@@ -11,7 +11,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">Accounts</div>
 
-    <table class="table">
+    <table id="accounts" class="table">
       <thead>
         <tr>
           <td>Account Nr</td>
@@ -20,7 +20,7 @@
       </thead>
       <tbody>
         #{list items:accounts, as:'account'}
-          <tr>
+          <tr class="account">
             <td>${account.accountId}</td>
             <td>${account.balance}</td>
           </tr>
