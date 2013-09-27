@@ -5,8 +5,8 @@ require:
     - org.mockito -> mockito-all 1.9.+
 
     #- org.postgresql -> postgresql 9.2-1003-jdbc4
-
     - ojdbc14_g -> ojdbc14_g
+    - play-selenide -> selenide 2.4.3
 
 repositories:
     - local-jars:
@@ -14,3 +14,8 @@ repositories:
         artifact:   ${application.path}/jars/[module].jar
         contains:
             - ojdbc14_g
+    - play-selenide:
+        type: http
+        artifact: http://repo.codeborne.com/play-selenide/[module]-[revision].zip
+        contains:
+          - play-selenide -> *
