@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="Payment can be created via Pl/Sql procedure add_order" author="Codeborne" runAlways="true" runOnChange="true" dbms="oracle" context="dev">
+    <sql splitStatements="false">
+      BEGIN
+        add_payment(account_from => '1111111',
+                    account_to => '22222',
+                    amount => 100,
+                    payment_date => SYSDATE);
+
+        assert_count('payment', 'id = ' || payment_id_seq.currval, 1);
+        assert_equals('payment', 'payment_type', 'id = ' || payment_id_seq.currval, 'CREDIT');
+        ROLLBACK;
+      END;
+    </sql>
+    <rollback/>
+  </changeSet>
+
+  <changeSet id="Payment with negative amount is debit payment" author="Codeborne" runAlways="true" runOnChange="true" dbms="oracle" context="dev">
+    <sql splitStatements="false">
+      BEGIN
+        add_payment(account_from => '1111111',
+                    account_to => '22222',
+                    amount => -200.20,
+                    payment_date => SYSDATE);
+
+        assert_equals('payment', 'payment_type', 'id = ' || payment_id_seq.currval, 'DEBIT');
+        ROLLBACK;
+      END;
+    </sql>
+    <rollback/>
+  </changeSet>
+
+  <changeSet id="Payment amount cannot be zero" author="Codeborne" runAlways="true" runOnChange="true" dbms="oracle" context="dev">
+    <sql splitStatements="false">
+      BEGIN
+        add_payment(account_from => '1111111',
+                    account_to => '22222',
+                    amount => 0,
+                    payment_date => SYSDATE);
+      EXCEPTION
+        WHEN others THEN
+          assert_equal(-20101, SQLCODE);
+      END;
+    </sql>
+    <rollback/>
+  </changeSet>
+
+</databaseChangeLog>

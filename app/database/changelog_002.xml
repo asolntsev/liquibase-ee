@@ -50,4 +50,14 @@
     </rollback>
   </changeSet>
 
+  <changeSet id="201310041123" author="Codeborne" runOnChange="true" dbms="oracle" context="dev">
+    <sqlFile path="procedures/assert_equal.sql" relativeToChangelogFile="true" splitStatements="false"/>
+  </changeSet>
+  <changeSet id="201310041124" author="Codeborne" runOnChange="true" dbms="oracle" context="dev">
+    <sqlFile path="procedures/assert_equals.sql" relativeToChangelogFile="true" splitStatements="false"/>
+  </changeSet>
+  <changeSet id="201310041125" author="Codeborne" runOnChange="true" dbms="oracle" context="dev">
+    <sqlFile path="procedures/assert_count.sql" relativeToChangelogFile="true" splitStatements="false"/>
+  </changeSet>
+
 </databaseChangeLog>
