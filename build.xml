@@ -22,7 +22,13 @@
     <echo message="Database URL: ${db.url}"/>
   </target>
 
-  <target name="migrate-database" depends="setup-database">
+  <target name="unlock-database" depends="setup-database">
+    <sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pass}" classpathref="database.lib.path">
+      update databasechangeloglock set locked = 0;
+    </sql>
+  </target>
+
+  <target name="migrate-database" depends="unlock-database">
     <property name="dropFirst" value="false"/>
     <echo message="Database username: ${db.user}, contexts: ${liquibase.contexts}"/>
     <updateDatabase
@@ -58,7 +64,7 @@
     <antcall target="migrate-database"/>
   </target>
 
-  <target name="rollback-database" depends="setup-database">
+  <target name="rollback-database" depends="unlock-database">
     <echo message="Database username: ${db.user}"/>
     <property name="count" value="1"/>
     <rollbackDatabase
