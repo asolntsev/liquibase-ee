@@ -3,9 +3,9 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-  <changeSet id="201205281433" author="Codeborne">
+  <changeSet id="201309281433" author="Codeborne">
     <createTable tableName="account">
       <column name="id" type="NUMBER" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" primaryKeyName="account_pk"/>

@@ -8,3 +8,4 @@
 /tmp
 /out
 /modules
+/.ant-targets-build.xml

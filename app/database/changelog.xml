@@ -3,23 +3,15 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
   <include file="changelog_001.xml" relativeToChangelogFile="true"/>
   <include file="test_data.xml" relativeToChangelogFile="true"/>
 
-  <!--<include file="changelog_procedures_001.xml"/>
-  <include file="database/static_data_001.xml"/>
-
-  <include file="database/changelog_002.xml"/>
-  <include file="database/static_data_002.xml"/>
-
-  <include file="database/changelog_003.xml"/>
+  <include file="changelog_002.xml" relativeToChangelogFile="true"/>
 
   <changeSet id="recompile packages" author="Codeborne" runAlways="true" runOnChange="true" dbms="oracle">
-    <sqlFile path="recompile_packages.sql" splitStatements="false"/>
+    <sqlFile path="procedures/recompile_packages.sql" splitStatements="false" relativeToChangelogFile="true"/>
   </changeSet>
-
-  <include file="database/tests.xml"/>-->
 
 </databaseChangeLog>

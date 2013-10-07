@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="201310041026" author="Codeborne">
+    <createSequence sequenceName="payment_id_seq" startValue="1000"/>
+  </changeSet>
+
+  <changeSet id="201310041035" author="Codeborne">
+    <createTable tableName="payment">
+      <column name="id" type="NUMBER" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="payment_pk"/>
+      </column>
+      <column name="payment_type" type="VARCHAR2(6)">
+        <constraints nullable="false" />
+      </column>
+      <column name="account_from" type="VARCHAR2(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="account_to" type="VARCHAR2(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="amount" type="NUMBER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="payment_date" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="201310041040" author="Codeborne">
+    <sql>
+      ALTER TABLE payment
+      ADD CONSTRAINT payment_type_enum
+      CHECK (payment_type IN ('DEBIT', 'CREDIT'))
+    </sql>
+    <rollback>
+      <sql>ALTER TABLE payment DROP CONSTRAINT payment_type_enum</sql>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="201310041038" author="Codeborne" runOnChange="true" dbms="oracle">
+    <sqlFile path="procedures/add_payment.sql" relativeToChangelogFile="true" splitStatements="false"/>
+    <rollback>
+      DROP procedure add_payment;
+    </rollback>
+  </changeSet>
+
+</databaseChangeLog>
