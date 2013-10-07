@@ -12,6 +12,7 @@
 
   <changeSet id="recompile packages" author="Codeborne" runAlways="true" runOnChange="true" dbms="oracle">
     <sqlFile path="procedures/recompile_packages.sql" splitStatements="false" relativeToChangelogFile="true"/>
+    <rollback/>
   </changeSet>
 
 </databaseChangeLog>
