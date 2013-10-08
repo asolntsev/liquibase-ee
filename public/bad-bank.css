@@ -7,3 +7,12 @@
 .starter-template {
   text-align: center;
 }
+
+.lead a {
+  padding: 5px 15px 5px 15px;
+}
+
+.active {
+  color: white;
+  background-color: #4fb7ff;
+}
