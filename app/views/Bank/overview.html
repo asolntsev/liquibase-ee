@@ -4,8 +4,11 @@
 <div class="container">
 
   <div class="starter-template">
-    <h1>Bank overview</h1>
-    <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+    <h1>Обзор</h1>
+    <p class="lead">
+      <a href="@{Bank.overview()}" class="active">Мои бабосы</a>  |
+      <a href="@{Payments.list()}">Выписка</a>
+    </p>
   </div>
 
   <div class="panel panel-default">
@@ -27,5 +30,8 @@
         #{/list}
       </tbody>
     </table>
+
+    <img src="/public/bad-bank-logo.png" style="width: 200px; margin-top: 50px;" align="right"/>
   </div>
+
 </div>

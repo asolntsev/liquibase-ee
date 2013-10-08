@@ -1,0 +1,43 @@
+#{extends 'main.html' /}
+#{set title:'Payments' /}
+
+<div class="container">
+
+  <div class="starter-template">
+    <h1>Выписка</h1>
+    *{<p class="lead">Чо? Каму? Пачом?</p>}*
+    <p class="lead">
+      <a href="@{Bank.overview()}">Мои бабосы</a>  |
+      <a href="@{Payments.list()}" class="active">Выписка</a>
+    </p>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Payments</div>
+
+    <table id="payments" class="table">
+      <thead>
+        <tr>
+          <td>From</td>
+          <td>To</td>
+          <td>Amount</td>
+          <td>Date</td>
+          <td>Type</td>
+        </tr>
+      </thead>
+      <tbody>
+        #{list items:payments, as:'payment'}
+          <tr class="payment">
+            <td>${payment.accountFrom}</td>
+            <td>${payment.accountTo}</td>
+            <td>${payment.amount}</td>
+            <td>${payment.date}</td>
+            <td>${payment.type}</td>
+          </tr>
+        #{/list}
+      </tbody>
+    </table>
+
+    <img src="/public/bad-bank-logo.png" style="width: 200px; margin-top: 50px;" align="right"/>
+  </div>
+</div>
