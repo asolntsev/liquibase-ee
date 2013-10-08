@@ -21,6 +21,7 @@
           <td>From</td>
           <td>To</td>
           <td>Amount</td>
+          <td>Comment</td>
           <td>Date</td>
           <td>Type</td>
         </tr>
@@ -31,7 +32,8 @@
             <td>${payment.accountFrom}</td>
             <td>${payment.accountTo}</td>
             <td>${payment.amount}</td>
-            <td>${payment.date}</td>
+            <td>${payment.description}</td>
+            <td>${payment.date.format('dd.MM HH:mm')}</td>
             <td>${payment.type}</td>
           </tr>
         #{/list}

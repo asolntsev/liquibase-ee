@@ -8,6 +8,7 @@
   <include file="test_data_001.xml" relativeToChangelogFile="true"/>
 
   <include file="changelog_002.xml" relativeToChangelogFile="true"/>
+  <include file="test_data_002.xml" relativeToChangelogFile="true"/>
 
   <changeSet id="recompile packages" author="Codeborne" runAlways="true" runOnChange="true" dbms="oracle">
     <sqlFile path="procedures/recompile_packages.sql" splitStatements="false" relativeToChangelogFile="true"/>

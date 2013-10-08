@@ -15,7 +15,7 @@
         <constraints nullable="false" primaryKey="true" primaryKeyName="payment_pk"/>
       </column>
       <column name="payment_type" type="VARCHAR2(6)">
-        <constraints nullable="false" />
+        <constraints nullable="false"/>
       </column>
       <column name="account_from" type="VARCHAR2(32)">
         <constraints nullable="false"/>
@@ -29,6 +29,7 @@
       <column name="payment_date" type="DATE">
         <constraints nullable="false"/>
       </column>
+      <column name="description" type="VARCHAR2(512)"/>
     </createTable>
   </changeSet>
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="201310082212" author="Codeborne" context="dev, test">
+    <insert tableName="payment">
+      <column name="id" valueNumeric="1"/>
+      <column name="payment_type" value="DEBIT"/>
+      <column name="account_from" value="мама"/>
+      <column name="account_to" value="я"/>
+      <column name="amount" valueNumeric="100"/>
+      <column name="payment_date" valueDate="sysdate-3"/>
+      <column name="description" value="Сынок, это сестре на обед"/>
+    </insert>
+    <insert tableName="payment">
+      <column name="id" valueNumeric="2"/>
+      <column name="payment_type" value="CREDIT"/>
+      <column name="account_from" value="я"/>
+      <column name="account_to" value="Алёна"/>
+      <column name="amount" valueNumeric="70"/>
+      <column name="payment_date" valueDate="sysdate-2"/>
+      <column name="description" value="Это тебе мама передала"/>
+    </insert>
+    <rollback>
+      <delete tableName="payment">
+        <where>id in (1, 2)</where>
+      </delete>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>

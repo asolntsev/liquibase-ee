@@ -10,7 +10,8 @@
         add_payment(account_from => '1111111',
                     account_to => '22222',
                     amount => 100,
-                    payment_date => SYSDATE);
+                    payment_date => SYSDATE,
+                    description => 'test1');
 
         assert_count('payment', 'id = ' || payment_id_seq.currval, 1);
         assert_equals('payment', 'payment_type', 'id = ' || payment_id_seq.currval, 'CREDIT');
@@ -26,7 +27,8 @@
         add_payment(account_from => '1111111',
                     account_to => '22222',
                     amount => -200.20,
-                    payment_date => SYSDATE);
+                    payment_date => SYSDATE,
+                    description => 'test 2');
 
         assert_equals('payment', 'payment_type', 'id = ' || payment_id_seq.currval, 'DEBIT');
         ROLLBACK;
@@ -41,7 +43,8 @@
         add_payment(account_from => '1111111',
                     account_to => '22222',
                     amount => 0,
-                    payment_date => SYSDATE);
+                    payment_date => SYSDATE,
+                    description => 'test 3');
       EXCEPTION
         WHEN others THEN
           assert_equal(-20101, SQLCODE);
