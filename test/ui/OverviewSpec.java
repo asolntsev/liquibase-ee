@@ -15,7 +15,8 @@ public class OverviewSpec extends UITest {
   @Test
   public void showsAccountsWithBalance() {
     open("/");
-    $("h1").shouldHave(text("Bank overview"));
+    $("h1").shouldHave(text("Обзор"));
+    $(".lead .active").shouldHave(text("Мои бабосы"));
 
     $$("#accounts .account").shouldHave(texts(
         "acc-001-001-001 1000",

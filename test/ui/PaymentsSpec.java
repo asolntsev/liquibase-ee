@@ -15,8 +15,8 @@ public class PaymentsSpec extends UITest {
     $(byText("Выписка")).click();
 
     $$("#payments .payment").shouldHave(texts(
-        "мама я",
-        "я сестра"));
+        "я Алёна 70 Это тебе мама передала",
+        "мама я 100 Сынок, это сестре на обед"));
 
     holdBrowserOpen = true;
   }
