@@ -21,6 +21,8 @@
     <rollback/>
   </changeSet>
 
+
+
   <changeSet id="Payment with negative amount is debit payment" author="Codeborne" runAlways="true" runOnChange="true" dbms="oracle" context="dev">
     <sql splitStatements="false">
       BEGIN

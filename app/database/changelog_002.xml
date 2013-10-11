@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -8,6 +7,10 @@
   <changeSet id="201310041026" author="Codeborne">
     <createSequence sequenceName="payment_id_seq" startValue="1000"/>
   </changeSet>
+
+
+
+
 
   <changeSet id="201310041035" author="Codeborne">
     <createTable tableName="payment">
@@ -33,6 +36,10 @@
     </createTable>
   </changeSet>
 
+
+
+
+
   <changeSet id="201310041040" author="Codeborne">
     <sql>
       ALTER TABLE payment
@@ -44,6 +51,11 @@
     </rollback>
   </changeSet>
 
+
+
+
+
+  <!--процедурка-->
   <changeSet id="201310041038" author="Codeborne" runOnChange="true" dbms="oracle">
     <sqlFile path="procedures/add_payment.sql" relativeToChangelogFile="true" splitStatements="false"/>
     <rollback>
@@ -51,6 +63,10 @@
     </rollback>
   </changeSet>
 
+
+
+
+  <!--тестовые процедурки-->
   <changeSet id="201310041123" author="Codeborne" runOnChange="true" dbms="oracle" context="dev">
     <sqlFile path="procedures/assert_equal.sql" relativeToChangelogFile="true" splitStatements="false"/>
   </changeSet>

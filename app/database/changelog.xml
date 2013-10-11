@@ -5,16 +5,21 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
   <include file="changelog_001.xml" relativeToChangelogFile="true"/>
+
+  <!--вброс 2-->
   <include file="test_data_001.xml" relativeToChangelogFile="true"/>
 
+  <!--вброс 3-->
   <include file="changelog_002.xml" relativeToChangelogFile="true"/>
   <include file="test_data_002.xml" relativeToChangelogFile="true"/>
 
+  <!--вброс 4-->
   <changeSet id="recompile packages" author="Codeborne" runAlways="true" runOnChange="true" dbms="oracle">
     <sqlFile path="procedures/recompile_packages.sql" splitStatements="false" relativeToChangelogFile="true"/>
     <rollback/>
   </changeSet>
 
+  <!--вброс 5-->
   <include file="tests.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
