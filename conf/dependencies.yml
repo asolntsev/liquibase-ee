@@ -1,12 +1,12 @@
 require:
     - play 1.2+
-    - play -> liquibase 2.4+
+    - play-liquibase -> play-liquibase 3.1.1
     - org.hamcrest -> hamcrest-all 1.+
     - org.mockito -> mockito-all 1.9.+
 
     #- org.postgresql -> postgresql 9.2-1003-jdbc4
     - ojdbc14_g -> ojdbc14_g
-    - play-selenide -> selenide 2.4.3
+    - play-tests -> tests 2.14.1
 
 repositories:
     - local-jars:
@@ -16,6 +16,7 @@ repositories:
             - ojdbc14_g
     - play-selenide:
         type: http
-        artifact: http://repo.codeborne.com/play-selenide/[module]-[revision].zip
+        artifact: http://repo.codeborne.com/[organization]/[module]-[revision].zip
         contains:
-          - play-selenide -> *
+          - play-liquibase -> *
+          - play-tests -> *
