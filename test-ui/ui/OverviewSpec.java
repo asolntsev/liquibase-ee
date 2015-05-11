@@ -1,15 +1,12 @@
 package ui;
 
-import com.codeborne.selenide.Configuration;
 import org.junit.Test;
 import play.test.UITest;
 
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Configuration.holdBrowserOpen;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 public class OverviewSpec extends UITest {
   @Test
