@@ -31,7 +31,7 @@
     </sql>
   </target>
 
-  <target name="migrate-database" depends="unlock-database">
+  <target name="migrate-database" depends="setup-database">
     <property name="dropFirst" value="false"/>
     <echo message="Database username: ${db.user}, contexts: ${liquibase.contexts}"/>
     <updateDatabase
@@ -67,7 +67,7 @@
     <antcall target="migrate-database"/>
   </target>
 
-  <target name="rollback-database" depends="unlock-database">
+  <target name="rollback-database" depends="setup-database">
     <echo message="Database username: ${db.user}"/>
     <property name="count" value="1"/>
     <rollbackDatabase
