@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="LiquiBase Enterprise Edition" default="help">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="LiquiBase Enterprise Edition" default="help"
+         xmlns:liquibase="antlib:liquibase.integration.ant">
   <target name="help">
     <echo>ant create-database</echo>
     <echo>ant migrate-database</echo>
@@ -9,18 +10,17 @@
   </target>
 
   <target name="setup-database">
-    <!--<property name="environment" value="local"/>-->
-    <!--<property file="conf/${environment}.properties"/>-->
     <property file="conf/application.conf"/>
 
     <path id="database.lib.path">
       <fileset dir="jars" includes="*.jar"/>
+      <fileset dir="modules" includes="liquibase*/lib/liquibase-core*.jar"/>
     </path>
 
-    <taskdef resource="liquibasetasks.properties">
+    <taskdef resource="liquibase/integration/ant/antlib.xml" uri="antlib:liquibase.integration.ant">
       <classpath refid="database.lib.path"/>
     </taskdef>
-
+    
     <echo message="Database URL: ${db.url}"/>
   </target>
 
@@ -34,17 +34,19 @@
   <target name="migrate-database" depends="setup-database">
     <property name="dropFirst" value="false"/>
     <echo message="Database username: ${db.user}, contexts: ${liquibase.contexts}"/>
-    <updateDatabase
-        driver="${db.driver}" dropFirst="${dropFirst}" classpathref="database.lib.path"
+    <liquibase:updateDatabase
+        dropFirst="${dropFirst}" classpathref="database.lib.path"
         changeLogFile="app/database/changelog.xml"
-        url="${db.url}"
-        username="${db.user}"
-        password="${db.pass}"
-        contexts="${liquibase.contexts}"
-        >
-      <changelogproperty name="db.dblink.accounts" value="${db.dblink.accounts}"/>
-      <changelogproperty name="db.dblink.payments" value="${db.dblink.payments}"/>
-    </updateDatabase>
+        contexts="${liquibase.contexts}">
+      <liquibase:database driver="${db.driver}"
+                          url="${db.url}"
+                          user="${db.user}"
+                          password="${db.pass}"/>
+      <liquibase:changeLogParameters>
+        <liquibase:changeLogParameter name="db.dblink.accounts" value="${db.dblink.accounts}"/>
+        <liquibase:changeLogParameter name="db.dblink.payments" value="${db.dblink.payments}"/>
+      </liquibase:changeLogParameters>
+    </liquibase:updateDatabase>
   </target>
 
   <target name="show-sql" depends="setup-database">
@@ -70,16 +72,18 @@
   <target name="rollback-database" depends="setup-database">
     <echo message="Database username: ${db.user}"/>
     <property name="count" value="1"/>
-    <rollbackDatabase
-        driver="${db.driver}" classpathref="database.lib.path" rollbackCount="${count}"
+    <liquibase:rollbackDatabase
+        classpathref="database.lib.path" rollbackCount="${count}"
         changeLogFile="app/database/changelog.xml"
-        url="${db.url}"
-        username="${db.user}"
-        password="${db.pass}"
-        contexts="${liquibase.contexts}"
-        >
-      <changelogproperty name="db.dblink.accounts" value="${db.accounts}"/>
-      <changelogproperty name="db.dblink.payments" value="${db.dblink.payments}"/>
-    </rollbackDatabase>
+        contexts="${liquibase.contexts}">
+      <liquibase:database driver="${db.driver}"
+                          url="${db.url}"
+                          user="${db.user}"
+                          password="${db.pass}"/>
+      <liquibase:changeLogParameters>
+        <liquibase:changeLogParameter name="db.dblink.accounts" value="${db.dblink.accounts}"/>
+        <liquibase:changeLogParameter name="db.dblink.payments" value="${db.dblink.payments}"/>
+      </liquibase:changeLogParameters>
+    </liquibase:rollbackDatabase>
   </target>
 </project>
